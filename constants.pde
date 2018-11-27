@@ -1,0 +1,15 @@
+static final int SCREENX = 1920;
+static final int SCREENY = 1080;
+static final int MARGIN = 10;
+static final int EVENT_NULL = 0;
+static final int TEXT_WIDGET=1;          //( event )          //( if pressed )
+static final int EVENT_BUTTON1=1;
+static final int EVENT_BUTTON2=2;
+static final int EVENT_DEF_Q = 3;
+static final int EVENT_USER_WIDGET = 4;
+static final int EVENT_BUSINESS_WIDGET = 5;
+static final int EVENT_REVIEW_WIDGET = 6;
+static final int EVENT_SEARCH_USER = 7;
+static final int EVENT_SEARCH_BUSINESS = 8;
+static final int WIDGET_TEXT_Y_OFFSET = -10;
+static final int WIDGET_TEXT_X_OFFSET = 10;
