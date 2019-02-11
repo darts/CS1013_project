@@ -3,14 +3,14 @@ class Review {
   String reviewID;
   String businessID; 
   int stars;
-  Date Date;
+  String Date;
   String text;
   int useful;
   int funny;
   int cool;
 
   public Review(String reviewID, String userID, String businessID, int stars, 
-    Date date, String text, int useful, int funny, int cool) {
+    String date, String text, int useful, int funny, int cool) {
     this.userID = userID;
     this.reviewID = reviewID;
     this.businessID = businessID;
@@ -40,9 +40,9 @@ class Review {
   public int characterCount(){
     return this.text.length();
   }
-  public String getUserName() {
+  public String getUserNameByID() {
     Query nameQuery = new Query();
-    return nameQuery.getUserName(this.userID);
+    return nameQuery.getUserNameByID(this.userID);
   }
   public String getUserID() {
     return userID;
@@ -68,10 +68,10 @@ class Review {
   public void setStars(int stars) {
     this.stars = stars;
   }
-  public Date getDate() {
+  public String getDate() {
     return Date;
   }
-  public void setDate(Date date) {
+  public void setDate(String date) {
     Date = date;
   }
   public String getText() {

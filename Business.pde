@@ -1,4 +1,4 @@
-public class Business {
+public class Business {//This is a datatype class
   private String BusinessID;
   private String name;
   private String neighborhood;

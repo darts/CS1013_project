@@ -2,7 +2,7 @@ public class User {
   private String userID;
   private String name;
   private int reviewCount;
-  private Date yelpingSince;
+  private String yelpingSince;
   private String[] friends;
   private int useful;
   private int funny;
@@ -21,10 +21,10 @@ public class User {
   private int complimentFunny;
   private int complimentWriter;
   private int complimentPhotos;
-  public User(String userID, String name, int reviewCount, Date yelpingSince, String[] friends, int useful, int funny,
-      int cool, int fans, String elite, double averageStars, int complimentHot, int complimentMore,
-      int complimentProfile, int complimentCute, int complimentList, int complimentNote, int complimentPlain,
-      int complimentCool, int complimentFunny, int complimentWriter, int complimentPhotos) {
+  public User(String userID, String name, int reviewCount, String yelpingSince, String[] friends, int useful, int funny, 
+    int cool, int fans, String elite, double averageStars, int complimentHot, int complimentMore, 
+    int complimentProfile, int complimentCute, int complimentList, int complimentNote, int complimentPlain, 
+    int complimentCool, int complimentFunny, int complimentWriter, int complimentPhotos) {
     super();
     this.userID = userID;
     this.name = name;
@@ -67,10 +67,10 @@ public class User {
   public void setReviewCount(int reviewCount) {
     this.reviewCount = reviewCount;
   }
-  public Date getYelpingSince() {
+  public String getYelpingSince() {
     return yelpingSince;
   }
-  public void setYelpingSince(Date yelpingSince) {
+  public void setYelpingSince(String yelpingSince) {
     this.yelpingSince = yelpingSince;
   }
   public String[] getFriends() {
@@ -181,5 +181,4 @@ public class User {
   public void setComplimentPhotos(int complimentPhotos) {
     this.complimentPhotos = complimentPhotos;
   }
-  
 }

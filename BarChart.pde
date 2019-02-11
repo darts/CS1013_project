@@ -1,11 +1,17 @@
 class BarChart extends Chart {
   String xTitle, yTitle;
-  float maxXvalue, maximumY, minimumY, xStart, xCounter, columnHeight, 
-    yScaledToChart, scaledColumnHeight, roughColumnWidth, columnWidth;
+  float maxXvalue, maximumY, minimumY, 
+    xStart, xCounter, columnHeight, 
+    yScaledToChart, scaledColumnHeight, 
+    roughColumnWidth, columnWidth;
   color columnColor;
   double toPrint;
 
-  BarChart(String title, int xPos, int yPos, int width, int height, double max, float[] points, String[] xAxisLabels, String xLabel, String yLabel, PFont headerFont, PFont labelFont, color chartColor, color columnColor, boolean labelX) {
+  //Create a new barchart
+  BarChart(String title, int xPos, int yPos, int width, int height, double max, 
+    float[] points, String[] xAxisLabels, String xLabel, String yLabel, 
+    PFont headerFont, PFont labelFont, color chartColor, 
+    color columnColor, boolean labelX) {
     super(points, xAxisLabels, xLabel, yLabel, title, headerFont, labelFont, labelX);
     this.columnColor = columnColor;
     this.x = xPos; 
@@ -20,10 +26,12 @@ class BarChart extends Chart {
     minimumY = 0;
     maximumY = (float)max;
   }
-
+  
+  //Draw the barchart
   void draw() {
+    noStroke();
     fill(chartColor);
-    rect(x-MARGIN, y-height-MARGIN, width+(2*MARGIN), height+(2*MARGIN));
+    rect(x-MARGIN, y-height-MARGIN, width+(2*MARGIN), height+(2*MARGIN));//Draw the chart container/background.
 
     //draw axis lines
     stroke(175);
@@ -31,10 +39,6 @@ class BarChart extends Chart {
     line(x-3, y+2, x-3, y-height);
     noStroke();
     xStart = x;
-
-    //set max y value to +10 the max value in the columnList
-    //maximumY = max(dataPoints);
-    //maximumY = maximumY + 10;
     xCounter = dataPoints.length;
 
     //draw min and max Y axis labels
@@ -60,7 +64,7 @@ class BarChart extends Chart {
 
       //label column base and values.
       textFont(labelFont);
-      textAlign(CENTER, CENTER);
+      textAlign(CENTER, BOTTOM);
       fill(100);
       //toPrint = round(dataPoints[index]);
       toPrint = (double)(round(dataPoints[index], 1));
@@ -80,16 +84,18 @@ class BarChart extends Chart {
 
     // print the title of the chart
     fill(labelColor);
-    textAlign(CENTER, TOP);
-    text(title, x+width/2, y-height);
+    textAlign(CENTER, BOTTOM);
+    text(title, x+width/2, y-height-30);
     textAlign(RIGHT, BOTTOM);
     text(yLabel, x, y - (height * 1.02));
     textAlign(LEFT, CENTER);
     text(xLabel, x + (width * 1.02), y);
     textAlign(LEFT, BASELINE);
     textFont(DEF_FONT);
+    stroke(0);
   }
 
+  //Round a number to x decimal places.
   double round (double value, int precision) {
     int scale = (int) Math.pow(10, precision);
     return (double) Math.round(value * scale) / scale;

@@ -5,6 +5,14 @@ class Screen {
   ArrayList<ScrollWindow> scrollWindowList = new ArrayList<ScrollWindow>();
   ArrayList<RadioButton> radioButtonList = new ArrayList<RadioButton>();
   boolean drawScroll;
+  boolean drawMap;
+  Business business;
+  User user;
+
+  {
+    user = null;
+    business = null;
+  }
 
 
   PImage background;
@@ -18,6 +26,7 @@ class Screen {
   Screen() {
     background = null;
     drawScroll = true;
+    drawMap = true;
   }
 
   void addTextWidget(TextWidget textWidget) {
@@ -32,64 +41,65 @@ class Screen {
   void addChart(Chart ch) {
     chartList.add(ch);
   }
-  
-  void addRadioButton(RadioButton button){
-   radioButtonList.add(button); 
+
+  void addRadioButton(RadioButton button) {
+    radioButtonList.add(button);
   }
 
   void addScrollWindow(ScrollWindow window) {
     scrollWindowList.add(window);
   }
   
-  void scroll(int speed){
-    scrollWindowList.get(0).scroll(speed); 
+  void removeScrollWindow(ScrollWindow window){
+   scrollWindowList.remove(window); 
   }
 
+  void scroll(int speed) {
+    if (scrollWindowList.size() == 1)
+      scrollWindowList.get(0).scroll(speed);
+    else if (scrollWindowList.size() == 2)
+      scrollWindowList.get(1).scroll(speed);
+  }
+
+  //Draws all widgets and buttons.
   void draw() {
-    //if(background != null)
-    //image(background, 0, 0, SCREENX, SCREENY);
+    //Draw the background.
+    noStroke();
+    fill(255);
+    rect(0, 0, 1920, 1080);
+    drawWidgets();
+  }
+
+  void drawWidgets() {
+    //Draw the widgets.
     for (int i = 0; i<widgetList.size(); i++) {
       Widget theWidget = (Widget)widgetList.get(i);
       theWidget.draw();
     }
+    //Draw the textWidgets.
     for (int i = 0; i<textWidgetList.size(); i++) {
       TextWidget theTextWidget = (TextWidget)textWidgetList.get(i);
       theTextWidget.draw();
     }
+    //Draw the charts.
     for (Chart ch : chartList) {
       ch.draw();
     }
-    if (drawScroll){
+    //Draw the scrollwindows.
+    if (drawScroll) {
       for (ScrollWindow window : scrollWindowList)
         window.draw();
     }
-    
-    for(RadioButton button : radioButtonList){
-     button.draw(); 
+    //Draw the radiobuttons.
+    for (RadioButton button : radioButtonList) {
+      button.draw();
     }
+
+    textAlign(LEFT, BASELINE);
   }
 
-  int getEvent(int mousX, int mousY) {
-    //Chech if any widgets have been pressed.
-    for (int i = 0; i < widgetList.size(); i++) {
-      Widget widget = widgetList.get(i);
-      if (mousX> widget.x && mousX < widget.x+width && mousY >widget.y && mousY <widget.y+height) {
-        return event;
-      }
-    } 
-    //Check if any textwidgets have been pressed.
-    for (int i = 0; i < textWidgetList.size(); i++) {
-      TextWidget textWidget = textWidgetList.get(i);
-      if (mousX> textWidget.x && mousX < textWidget.x+width && mousY >textWidget.y && mousY <textWidget.y+height) {
-        return event;
-      }
-    } 
-
-
-
-    return EVENT_NULL;
-  }
-
+  void displayReviews() {
+  };
 
   int mousePressed() {
     int event;
@@ -99,20 +109,22 @@ class Screen {
       if (event != EVENT_NULL)
         return event;
     }
-    for(RadioButton button : radioButtonList){
-      if(button.clicked() != EVENT_NULL)
+    for (RadioButton button : radioButtonList) {
+      if (button.clicked() != EVENT_NULL)
         return button.clicked();
     }
+
     return EVENT_NULL;
   }
-  
-  ScrollBox scrollPressed(){
-   for(ScrollWindow window : scrollWindowList){
-     if(window.clicked() != null)
-       return window.clicked();
-   }
-   return null;
-   
+
+  //Returns a scrollbox object if it has been pressed, otherwise returns null. This is separate to the 
+  //main mousepressed function as it returns a scrollbox object and not an int.
+  ScrollBox scrollPressed() {
+    for (ScrollWindow window : scrollWindowList) {
+      if (window.clicked() != null)
+        return window.clicked();
+    }
+    return null;
   }
 
 
@@ -130,20 +142,16 @@ class Screen {
     return null;
   }
 
+  //Determines if the scrollboxes should be drawn.
   void drawScroll(boolean draw) {
     drawScroll = draw;
   }
 
-  //Add borderColour to widget class----------------------
-  //void mouseMoved() {
-  //  int event;
-  //  for (int i = 0; i<widgetList.size(); i++) {
-  //    Widget theWidget = (Widget) widgetList.get(i);
-  //    event = theWidget.getEvent(mouseX, mouseY);
-  //    switch(event) {
-  //    case EVENT_NULL:
-  //      theWidget.borderColour=0;
-  //    }
-  //  }
-  //}
+  Business getBusiness() {
+    return business;
+  }
+
+  User getUser() {
+    return user;
+  }
 }

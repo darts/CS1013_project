@@ -1,6 +1,6 @@
 class ScatterGraph extends Chart {
   String xTitle, yTitle;
-  float maxX, maximumY, minimumY, xStart, xCounter,  yCord, xCord,
+  float maxX, maxY, minimumY, xStart, xCounter, yCord, xCord, 
     yScaledToChart, scaledColumnHeight, roughColumnWidth, columnWidth;
   float[] xCords, yCords;
   color pointColor;
@@ -10,7 +10,6 @@ class ScatterGraph extends Chart {
 
   ScatterGraph(String title, int xPos, int yPos, int width, int height, int maxY, int maxX, float[] yCords, float[] xCords, String[] xAxisLabels, String xLabel, String yLabel, PFont headerFont, PFont labelFont, color chartColor, color pointColor, boolean labelX) {
     super(yCords, xAxisLabels, xLabel, yLabel, title, headerFont, labelFont, labelX);
-    //this.textBelowColumn = textBelowColumn;
     this.pointColor = pointColor;
     this.x = xPos; 
     this.width = width; 
@@ -24,13 +23,15 @@ class ScatterGraph extends Chart {
     this.yCords=yCords;
     labelColor= color(0);
     minimumY = 0;
-    maximumY = (float)maxY;
+    this.maxY = maxY;
     this.maxX=maxX;
   }
 
-  void draw() {
+  void draw() {//Draw the scatterplot
     fill(chartColor);
-    rect(x-MARGIN, y-height-MARGIN, width+(2*MARGIN), height+(2*MARGIN));
+    noStroke();
+    rect(x-MARGIN, y-height-MARGIN, width+(2*MARGIN), height+(2*MARGIN));//draw the outline/background
+    stroke(0);
 
     //draw axis lines
     stroke(175);
@@ -39,16 +40,13 @@ class ScatterGraph extends Chart {
     noStroke();
     xStart = x;
 
-    //set max y value to +10 the max value in the columnList
-    //maximumY = max(dataPoints);
-    //maximumY = maximumY + 10;
     xCounter = xCords.length;
 
     //draw min and max Y axis labels
     textFont(headerFont);
     fill(100);
     textAlign(RIGHT, CENTER);
-    text(int(maximumY), x-8, y-height);
+    text(int(maxY), x-8, y-height);
     text(int(minimumY), x-8, y);
     text(int (maxX), x+width, y+13);
 
@@ -56,27 +54,12 @@ class ScatterGraph extends Chart {
     for (int index = 0; index < xCounter; index++) {
       yCord = yCords[index];
       xCord = xCords[index];
-      
-     
-      //draw column
+      yCord= y-(yCord*(height/maxY));
+      xCord= x+(xCord*(width/maxX)-5);
+
+      //draw points
       fill(pointColor);
-      rect(xCord, yCord, 5,5);
-
-      //label column base and values.
-      textFont(labelFont);
-      textAlign(CENTER, CENTER);
-      fill(100);
-      //toPrint = round(dataPoints[index]);
-      toPrint = (double)(round(dataPoints[index], 1));
-
-      text(Double.toString(toPrint), x + (columnWidth / 2), y - (scaledColumnHeight));
-      if (labelX) {
-        textAlign(CENTER, TOP);
-        text(xLabels[index], x + (columnWidth / 2), y + 8);
-      }
-
-      //x startpoint of the next column
-      x += roughColumnWidth;
+      rect(xCord, yCord, 5, 5);
     }
     //reset x so for when draw is called again
     x = xStart;
@@ -84,7 +67,7 @@ class ScatterGraph extends Chart {
     // print the title of the chart
     fill(labelColor);
     textAlign(CENTER, TOP);
-    text(title, x+width/2, y-height);
+    text(title, x+width/2, y-height-20);
     textAlign(RIGHT, BOTTOM);
     text(yLabel, x, y - (height * 1.02));
     textAlign(LEFT, CENTER);
@@ -93,6 +76,7 @@ class ScatterGraph extends Chart {
     textFont(DEF_FONT);
   }
 
+  //round to x decimal points.
   double round (double value, int precision) {
     int scale = (int) Math.pow(10, precision);
     return (double) Math.round(value * scale) / scale;

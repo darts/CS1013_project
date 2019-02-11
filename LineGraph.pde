@@ -1,5 +1,4 @@
 class LineGraph extends Chart {
-  //double[] points;
   color linecolor;
   int xPos, yPos, width, height;
   double max;
@@ -15,7 +14,6 @@ class LineGraph extends Chart {
     this.yPos = yPos;
     this.width = width;
     this.height = height;
-    //this.min = min;
     this.max = max;
     steps = width / (points.length - 1);
     yMul = height / max;
@@ -31,12 +29,12 @@ class LineGraph extends Chart {
     stroke(graphColour);
     line((float)xPos, (float)yPos, (float)xPos, (float)(yPos - height));
     line((float)xPos, (float)yPos, (float)(xPos + width), (float)yPos);
-    
+
     //Draw the title
     textAlign(CENTER, BOTTOM);
     textFont(headerFont);
     text(title, (float)(xPos + (width / 2)), (float)(yPos - (height + (height / 15))));
-    
+
     //Draw the grid behind the graph and label the y-axis steps
     textFont(labelFont);
     for (int i = 0; i <= 10; i++) {
@@ -47,7 +45,7 @@ class LineGraph extends Chart {
       stroke(backColour);
       line((float)xPos, (float)(yPos - (i * yStep)), (float)(xPos + width), (float)(yPos - (i * yStep)));
     }
-    
+
     //Draw the data to the graph and draw the x-axis labels.
     fill(graphColour);
     for (int i = 0; i < dataPoints.length - 1; i++) {

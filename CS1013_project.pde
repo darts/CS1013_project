@@ -1,86 +1,88 @@
 import de.bezier.data.sql.*;
 import java.util.*;
+// map stuff
+import de.fhpotsdam.unfolding.*;
+import de.fhpotsdam.unfolding.core.*;
+import de.fhpotsdam.unfolding.data.*;
+import de.fhpotsdam.unfolding.events.*;
+import de.fhpotsdam.unfolding.geo.*;
+import de.fhpotsdam.unfolding.interactions.*;
+import de.fhpotsdam.unfolding.mapdisplay.*;
+import de.fhpotsdam.unfolding.mapdisplay.shaders.*;
+import de.fhpotsdam.unfolding.marker.*;
+import de.fhpotsdam.unfolding.providers.*;
+import de.fhpotsdam.unfolding.texture.*;
+import de.fhpotsdam.unfolding.tiles.*;
+import de.fhpotsdam.unfolding.ui.*;
+import de.fhpotsdam.unfolding.utils.*;
+import de.fhpotsdam.utils.*;
+import de.fhpotsdam.unfolding.providers.Google;
 
 SQLite db;
-ArrayList<Review> reviewList;
-int index;
-PFont standardFont;
-LineGraph g;
-BarChart ch1;
-int[] stars;
+Query dbUpdater, qCall;
 ScreenOrganiser so;
-PFont DEF_FONT, NEW_DEF_FONT;
-ScrollBox sb;
-ScrollWindow sw;
+PFont DEF_FONT, NEW_DEF_FONT, BARCHART_FONT,standardFont;
+PImage star;
+UnfoldingMap businessMap;
+UnfoldingMap USAMap;
+UnfoldingMap userMap;
+//PrintWriter output; // used in preloading data
 
 void settings() {
-  size(SCREENX, SCREENY);
+  size(SCREENX, SCREENY, P2D);// I had to change this to make maps work, shouldn't cause problems
 }
 
 void setup() {
   //Demo stuff-------------------------------------------
+  star = loadImage("star.jpg");
   DEF_FONT = loadFont("AgencyFB-Reg-24.vlw"); // Cannot be static.
   NEW_DEF_FONT = loadFont("AgencyFB-Reg-50.vlw");//Use this one.
-
+  BARCHART_FONT = loadFont("AgencyFB-Reg-35.vlw");
   standardFont = loadFont("AgencyFB-Reg-16.vlw");
-
+  businessMap = new UnfoldingMap(this, "businessMap", BUSINESS_MAP_X, BUSINESS_MAP_Y, BUSINESS_MAP_WIDTH, BUSINESS_MAP_HEIGHT); 
+  USAMap = new UnfoldingMap(this, "USAMap", USA_MAP_X-200, USA_MAP_Y, USA_MAP_WIDTH, USA_MAP_HEIGHT);
+  userMap = new UnfoldingMap(this, "userMap", BUSINESS_MAP_X, BUSINESS_MAP_Y+500, BUSINESS_MAP_WIDTH, BUSINESS_MAP_HEIGHT-200); 
+  
+  MapUtils.createDefaultEventDispatcher(this, businessMap);
+  MapUtils.createDefaultEventDispatcher(this, USAMap);
+  MapUtils.createDefaultEventDispatcher(this, userMap);
   db = new SQLite( this, "projectDB.db" );
+
   //New homepage.
   so = new ScreenOrganiser();
+
+  //Queries used for preloading data:
+  qCall = new Query();
+  //This was used to search all reviews and pull the number of reviews for each star rating.
+  //float[] revPStar = qCall.reviewsPerStar();
+  //for(int i = 0; i < revPStar.length; i++)
+  //  println(revPStar[i]);
   
-
-  //reviewList = new FileReader("reviews_cleaned.csv").toList();
-
-  //ReviewList list = new ReviewList(reviewList);
-  //stars = list.getStarCount();
-
-  ////Create barchart
-  //ch1 = new BarChart("Number of stars",color(255),color(20, 20, 240), standardFont, standardFont, true);
-  //float[] somePoints = {stars[1], stars[2], stars[3], stars[4], stars[5]};
-  ////ch1.setData(somePoints);
-
-  //Create line graph
-  //String[] lab = {"2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017"};
-  //g = new LineGraph("Average Stars Over Time", 90, 500, 600, 300, 5, list.getAverageStars(), lab, "Year", "Stars", standardFont, standardFont, color(200, 0, 0), color(0, 0, 21, 20));
-  //ch1 = new BarChart("Average Stars Over Time", 90, 500, 600, 300, 5, list.getAverageStars(), lab, "Year", "Stars", standardFont, standardFont, color(255), color(0, 0, 21, 20));
-
-
-  //open database file
-  Query aQuery = new Query();
-  //sw = new ScrollWindow(500, 100, 300, 600);
-  //sw.populate(aQuery.getUserByName("aoife"), color(230), NEW_DEF_FONT);
-  // sb = new ScrollBox(aQuery.getUserByName("aoife").get(0), 50, 50, 100, 100, color(200), DEF_FONT, 0);
-  // sb = new ScrollBox(aQuery.getUser("george").get(0), 50, 50, 200, 200, color(20, 255, 255), DEF_FONT, EVENT_BUTTON2);
-  // search database for a business
-  //ArrayList<Business> bList = aQuery.getBusinessByName("Messina");
-  //for(int index = 0; index < bList.size(); index++){
-  //  println(bList.get(index).getName());
+  //This was used to get some random reviews and see how the number of characters relates to number of stars.
+  //ArrayList<User> userList = qCall.getRandomUsers(1000);
+  //float[] friendCount = new float[1000];
+  //String fC = ""; 
+  //float[] reviewCount = new float[1000];
+  //String rC = "";
+  //for(int i = 0; i < userList.size(); i++){
+  // friendCount[i] = userList.get(i).getFriends().length;
+  // fC += friendCount[i] + ",";
+  // reviewCount[i] = userList.get(i).getReviewCount();
+  // rC += reviewCount[i] + ",";
   //}
-
-  //search database for a user
-  //ArrayList<User> uList = aQuery.getUser("Chris");
-  //for(int index = 0; index < uList.size(); index++){
-  //  println(uList.get(index).getName());
-  //}
-
-  //search database for 20 great reviews
-  //ArrayList<Review> rList = aQuery.greatReviews();
-  //for(int index = 0; index < rList.size(); index++){
-  //  println(rList.get(index).getReviewID());
-  //}
+  //output = createWriter("ta.txt");
+  //output.println(fC);
+  //output.println(rC);
+  //output.flush();
+  
 }
 
 void draw() { 
   background(255);
   so.draw();// screenOrganiser
-  //sb.draw();
-  //sw.draw();
 }
 
 void mouseWheel(MouseEvent event) {
-  //println(event);
-  //sw.scroll(event.getCount());
-  //sb.move(event.getCount());
   so.scroll(event.getCount());
 }
 
